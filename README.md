@@ -38,16 +38,20 @@ GreatKart is a high-performance, full-featured E-commerce solution built using t
    cd greatkart-django
 
 2. **Create a Virtual Environment:**
+   ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 3. **Install Dependencies:**
+    ```bash
    pip install -r requirement.txt
    
 4. **Run Migrations:**
+   ```bash
    python manage.py migrate
    
 5. **Start the Server:**
+   ```bash
    python manage.py runserver
 
 Developed with ❤️ by mdpatel007
