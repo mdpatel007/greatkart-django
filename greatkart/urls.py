@@ -22,9 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('store/', include('store.urls')),
-    
-    # HAVE KHALI AA J LINE RAKHO HOME PAGE MATE
     path('', include('accounts.urls')), 
-
+    path('cart/', include('carts.urls')),
     path("_reload_/", include("django_browser_reload.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
