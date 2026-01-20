@@ -144,6 +144,6 @@ MESSAGE_TAGS = {
 # Email Configuration
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mihirdudhat123@gmail.com' # Your Gmail
-EMAIL_HOST_PASSWORD = 'oatk blfm xdqe zheb' # Gmail 'App Password'
+EMAIL_HOST_USER = 'your-email-address@gmail.com' # Your Gmail
+EMAIL_HOST_PASSWORD = 'your-gmail-app-password' # Gmail 'App Password'
 EMAIL_USE_TLS = True
