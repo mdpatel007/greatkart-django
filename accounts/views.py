@@ -6,6 +6,9 @@ from .models import Account
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
+import requests
 
 # Varification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -77,29 +80,62 @@ def login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Authentication logic
-        # Django uses email as username in 'account' model (custom backend)
         user = auth.authenticate(email=email, password=password)
 
         if user is not None:
-            if user.is_active:
-                auth.login(request, user)
-                messages.success(request, 'You are now logged in.')
+            try:
+                # Find Session cart 
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                # Session cart all items (Guest Cart)
+                session_cart_items = CartItem.objects.filter(cart=cart)
                 
-                # Check if the user has come to login with a specific page (e.g. Checkout)
-                url = request.GET.get('next')
-                if url:
-                    return redirect(url)
-                else:
-                    return redirect('home')
-            else:
-                messages.error(request, 'Account is disabled. Please contact support.')
-                return redirect('login')
+                # Login user existing items (User Cart)
+                user_cart_items = CartItem.objects.filter(user=user)
+                
+                ex_var_list = []
+                id_list = []
+                for item in user_cart_items:
+                    existing_variation = list(item.variations.all())
+                    ex_var_list.append(existing_variation)
+                    id_list.append(item.id)
+
+                for item in session_cart_items:
+                    current_variation = list(item.variations.all())
+                    
+                    if current_variation in ex_var_list:
+                        # if variation match then add quantity 
+                        index = ex_var_list.index(current_variation)
+                        item_id = id_list[index]
+                        cart_item = CartItem.objects.get(id=item_id)
+                        cart_item.quantity += item.quantity # Add Session quantity 
+                        cart_item.user = user
+                        cart_item.save()
+                        item.delete() # Delete Session item  
+                    else:
+                        # if variation Not match then new item to joined user 
+                        item.user = user
+                        item.save()
+                        
+            except Cart.DoesNotExist:
+                pass
+
+            auth.login(request, user)
+            messages.success(request, 'You are now logged in.')
+            url = requests.META.get('HTTP_REFERER')
+            try: 
+                query = requests.utils.urlparse(url).query 
+                # next=/cart/checkout/
+                params = dict(x.split('=')for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                return redirect('dashboard')
         else:
             messages.error(request, 'Invalid email or password.')
             return redirect('login')
-
     return render(request, 'accounts/login.html')
+
 
 @login_required(login_url='login')
 def logout(request):
