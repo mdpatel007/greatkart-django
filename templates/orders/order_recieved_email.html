@@ -1,0 +1,22 @@
+{% autoescape off %}
+
+Hi {{ user.first_name }},
+
+YOUR ORDER HAS BEEN RECEIVED
+Thank you for your order! We are processing it and will notify you once it has shipped.
+
+Order Details:
+Order Number: {{ order.order_number }}
+Order Date: {{ order.created_at }}
+Total Amount: ${{ order.order_total }}
+
+Shipping Address:
+{{ order.full_name }}
+{{ order.full_address }}
+{{ order.city }}, {{ order.state }}
+{{ order.country }}
+Phone: {{ order.phone }}
+
+If you have any questions, feel free to contact our support team.
+
+{% endautoescape %}

@@ -164,6 +164,13 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Django specific ignores
+.env
+__pycache__/
+*.pyc
+db.sqlite3
+.venv/
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore

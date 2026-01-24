@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <center><i class="fas fa-check-circle" style="font-size: 72px; color: #28a745;"></i></center>
+    <h2 class="text-center">Payment Successful!</h2>
+    <br>
+    <div class="text-center">
+        <p>Your order has been placed successfully. Please find your order details below.</p>
+        <a href="{% url 'store' %}" class="btn btn-success">Continue Shopping</a>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8" style="margin: 0 auto;">
+            <div class="card">
+                <header class="card-header" style="background-color: #f8f9fa;">
+                    <strong class="d-inline-block mr-3">Order Number: {{ order.order_number }}</strong>
+                    <span>Transaction ID: {{ payment.payment_id }}</span>
+                </header>
+                <div class="card-body">
+                    <div class="row"> 
+                        <div class="col-md-8">
+                            <h6 class="text-muted">Billing Address</h6>
+                            <p>{{ order.first_name }} {{ order.last_name }}<br>
+                                {{ order.address_line_1 }} {{ order.address_line_2 }}<br>
+                                {{ order.city }}, {{ order.state }}<br>
+                                {{ order.country }}<br>
+                                Email: {{ order.email }}<br>
+                                Phone: {{ order.phone }}
+                            </p>
+                        </div>
+                    </div> 
+                </div> 
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Variations</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in ordered_products %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="{{ item.product.images.url }}" class="img-sm"></div>
+                                        <figcaption class="info">
+                                            <p class="title text-dark">{{ item.product.product_name }}</p>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td>
+                                    {% if item.variations.all %}
+                                        {% for v in item.variations.all %}
+                                            {{ v.variation_category | capfirst }} : {{ v.variation_value | capfirst }} <br>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.quantity }}</td>
+                                <td>${{ item.product_price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> 
+            </div> 
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p class="text-right mb-0">Subtotal: ${{ subtotal }}</p>
+                    <p class="text-right mb-0">Tax (2%): ${{ order.tax }}</p>
+                    <h5 class="text-right">Grand Total: ${{ order.order_total }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
