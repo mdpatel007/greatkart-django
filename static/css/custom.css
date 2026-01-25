@@ -1,0 +1,50 @@
+
+/* અસલી સ્ટાર રેટિંગ લોજિક */
+.rate {
+    display: inline-block;
+    border: none;
+    float: left;
+}
+
+.rate > input {
+    display: none;
+}
+
+.rate > label {
+    float: right;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 1.1em; /* ચોક્કસ પહોળાઈ આપવી જરૂરી છે */
+}
+
+.rate > label:before {
+    content: "\f005"; /* Full Star આઈકોન */
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+/* હાફ સ્ટાર માટેનું લોજિક */
+.rate > label.half:before {
+    content: "\f089"; /* Half Star આઈકોન */
+    position: absolute;
+    padding-right: 0;
+}
+
+/* સિલેક્ટેડ અને હોવર કલર (Golden) */
+.rate > input:checked ~ label,
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #ffc700;
+}
+
+/* હોવર કરતી વખતે થોડો લાઈટ કલર */
+.rate > input:checked + label:hover,
+.rate > input:checked ~ label:hover,
+.rate > label:hover ~ input:checked ~ label,
+.rate > input:checked ~ label:hover ~ label {
+    color: #ffed85;
+}
