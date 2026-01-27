@@ -25,3 +25,15 @@
     </div>
 </footer>
 <!-- ========================= FOOTER END // ========================= -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+   $(document).ready(function(){
+       $('.thumb a').click(function(e){
+           e.preventDefault();
+           var newImageSrc = $(this).attr('href');
+           $('.mainImage img').attr('src', newImageSrc);
+       });
+   });
+</script>
+</body>
+</html>

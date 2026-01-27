@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} My Orders - GreatKart {% endblock %}
+
+{% block content %}
+
+<section class="section-conten padding-y bg-light">
+    {% include "includes/alerts.html" %}
+    <div class="container">
+        <div class="row">
+            {% include 'includes/dashboard_sidebar.html' %}
+            
+            <main class="col-md-9">
+                <article class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-3">
+                                {% if userprofile.profile_picture %}
+                                    <img src="{{ userprofile.profile_picture.url }}" alt="User Avatar" class="rounded-circle border" width="70" height="70" style="object-fit: cover;">
+                                {% else %}
+                                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Default Avatar" class="rounded-circle border" width="70">
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h4 class="mb-0">Welcome, {{user.full_name}}!</h4>
+                                <p class="text-muted mb-0">{{user.email}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="row"> 
+                    <div class="col-md-12 mb-4">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-body">
+                                <h6 class="text-uppercase text-muted small font-weight-bold mb-3">Contact Information</h6>
+                                <p class="mb-2">
+                                    <i class="fa fa-envelope mr-2 text-muted"></i> {{user.email}}
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fa fa-phone mr-2 text-muted"></i> {{user.phone_number}}
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fa fa-map-marker mr-2 text-muted"></i> 
+                                    {% if userprofile %}
+                                        {{ userprofile.full_address }}, {{ userprofile.city }}, {{ userprofile.state }}
+                                    {% else %}
+                                        No address provided.
+                                    {% endif %}
+                                </p>
+                                <hr>
+                                <a href="{% url 'edit_profile' %}" class="btn btn-light btn-sm btn-block">Edit Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <article class="card shadow-sm">
+                    <header class="card-header bg-white border-bottom">
+                        <b class="d-inline-block mr-3">Recent Orders</b>
+                    </header>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                <tr>
+                                    <td><a href="#">{{order.order_number}}</a></td>
+                                    <td>{{order.created_at|date:"M d, Y"}}</td>
+                                    <td><span class="badge badge-success">{{order.status}}</span></td>
+                                    <td>${{order.order_total}}</td>
+                                    <td><a href="#" class="btn btn-sm btn-primary">Details</a></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">No orders found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+						
+                    </div>
+                </article>
+
+            </main>
+        </div> </div>
+</section>
+{% endblock %}

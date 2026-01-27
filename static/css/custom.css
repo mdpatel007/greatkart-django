@@ -1,50 +1,63 @@
-
-/* અસલી સ્ટાર રેટિંગ લોજિક */
-.rate {
-    display: inline-block;
-    border: none;
-    float: left;
-}
+/* Hide Radio button */
 
 .rate > input {
     display: none;
 }
 
+.rate {
+    display: inline-block;
+    border: 0;
+}
+
 .rate > label {
     float: right;
-    color: #ccc;
-    cursor: pointer;
-    font-size: 30px;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 1.1em; /* ચોક્કસ પહોળાઈ આપવી જરૂરી છે */
 }
 
+/* Showing the stars  */
 .rate > label:before {
-    content: "\f005"; /* Full Star આઈકોન */
-    font-family: FontAwesome;
     display: inline-block;
+    font-family: 1.1rem;
+    font-family: FontAwesome;
+    content: "\f005"; 
+    margin: 2px;
+    padding: 0.3rem .2rem;
+    cursor: pointer;
 }
 
-/* હાફ સ્ટાર માટેનું લોજિક */
+/* Half star trick */
 .rate > label.half:before {
-    content: "\f089"; /* Half Star આઈકોન */
+    content: "\f089"; 
     position: absolute;
     padding-right: 0;
 }
 
-/* સિલેક્ટેડ અને હોવર કલર (Golden) */
-.rate > input:checked ~ label,
-.rate:not(:checked) > label:hover,
-.rate:not(:checked) > label:hover ~ label {
-    color: #ffc700;
+/* CLick and hover */
+input:checked ~ label, label:hover ~ label {
+    color: #ffb503;
 }
 
-/* હોવર કરતી વખતે થોડો લાઈટ કલર */
-.rate > input:checked + label:hover,
-.rate > input:checked ~ label:hover,
-.rate > label:hover ~ input:checked ~ label,
-.rate > input:checked ~ label:hover ~ label {
-    color: #ffed85;
+/* hover highlight  */
+input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label 
+label:hover ~ input:checked ~ label {
+    color: #cc9000;
+} 
+
+/* Thumb images */
+ul.thumb {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+ul.thumb li {
+    list-style: none;
+}
+
+ul.thumb li img {
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    cursor: pointer;
 }

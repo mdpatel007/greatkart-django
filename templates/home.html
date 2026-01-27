@@ -38,7 +38,7 @@
             </div>
         {% else %}
             <div class="intro-banner-wrap">
-                <img src="/a/photos/banners/cover.jpg" class="img-fluid rounded w-100 banner-img">
+                <img src="/media/photos/banners/cover.jpg" class="img-fluid rounded w-100 banner-img">
             </div>
         {% endif %}
     </div>
@@ -86,6 +86,15 @@
 			<figcaption class="info-wrap">
 				<a href="{{ product.get_url }}"  class="title">{{ product.product_name }}</a>
 				<div class="price mt-1">${{product.price}}</div> <!-- price-wrap.// -->
+                <div class="rating-star" style="color: #ffc700;">
+                    <span>
+                        <i class="fa fa-star{% if product.averageReview < 0.5 %}-o{% elif product.averageReview  >= 0.5 and product.averageReview  < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.averageReview  < 2.5 %}-o{% elif product.averageReview  >= 2.5 and product.averageReview  < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.averageReview  < 1.5 %}-o{% elif product.averageReview  >= 1.5 and product.averageReview  < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.averageReview  < 3.5 %}-o{% elif product.averageReview  >= 3.5 and product.averageReview  < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if product.averageReview  < 4.5 %}-o{% elif product.averageReview >= 4.5 and product.averageReview  < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+                    </span> 
+                </div>
 			</figcaption>
 		</div> <!-- card.// -->
 	</div> <!-- col.// -->

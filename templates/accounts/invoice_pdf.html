@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page { size: A4; margin: 0; }
+        body { font-family: 'Helvetica', sans-serif; margin: 0; padding: 0; color: #333; }
+        
+        /* Blue Header Stripe */
+        .top-stripe { background: #1a237e; height: 100px; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 50px; color: white; box-sizing: border-box; }
+        .logo-text { font-size: 32px; font-weight: bold; }
+        .invoice-title { font-size: 40px; font-weight: 800; opacity: 0.8; }
+
+        .content { padding: 40px 50px; }
+
+        /* Meta Information Table (Modern Look) */
+        .meta-container { width: 100%; border: 1.5px solid #000; margin: 30px 0; border-radius: 5px; border-collapse: collapse; }
+        .meta-container td { padding: 15px; text-align: center; border-right: 1.5px solid #000; font-size: 14px; }
+        .meta-label { display: block; font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase; margin-bottom: 5px; }
+
+        /* Billing Table */
+        .billing-table { width: 100%; margin-bottom: 40px; }
+        .billing-table td { width: 50%; vertical-align: top; }
+        .section-header { font-size: 14px; color: #1a237e; font-weight: bold; border-bottom: 2px solid #1a237e; display: inline-block; margin-bottom: 15px; }
+
+        /* Product Table */
+        .product-table { width: 100%; border-collapse: collapse; }
+        .product-table th { background: #1a237e; color: white; padding: 12px; font-size: 12px; text-align: left; text-transform: uppercase; }
+        .product-table td { padding: 15px 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .product-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* Totals Section */
+        .totals-wrap { width: 35%; margin-left: 65%; margin-top: 30px; }
+        .total-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; }
+        .grand-total { background: #1a237e; color: white; padding: 15px; font-weight: bold; font-size: 20px; display: flex; justify-content: space-between; border-radius: 4px; }
+
+        /* Footer */
+        .footer { position: fixed; bottom: 50px; left: 50px; right: 50px; border-top: 2px solid #1a237e; padding-top: 20px; font-size: 11px; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+    <div class="top-stripe">
+        <div class="logo-text">GREATKART.</div>
+        <div class="invoice-title">INVOICE</div>
+    </div>
+
+    <div class="content">
+        <table class="meta-container" cellspacing="0">
+            <tr>
+                <td><span class="meta-label">Invoice Number</span><strong>#{{ order.order_number }}</strong></td>
+                <td><span class="meta-label">Invoice Date</span><strong>{{ order.created_at|date:"F d, Y" }}</strong></td>
+                <td style="border-right: 0;"><span class="meta-label">Payment Method</span><strong>{{ order.payment.payment_method }}</strong></td>
+            </tr>
+        </table>
+
+        <table class="billing-table">
+            <tr>
+                <td>
+                    <div class="section-header">BILL TO:</div><br>
+                    <strong>{{ order.full_name }}</strong><br>
+                    {{ order.full_address }}<br>
+                    {{ order.city }}, {{ order.state }} - {{ order.country }}<br>
+                    M: {{ order.phone }}
+                </td>
+                <td style="text-align: right;">
+                    <div class="section-header">FROM:</div><br>
+                    <strong>GreatKart Solutions</strong><br>
+                    402 Business Avenue, Ahmedabad<br>
+                    Gujarat, India - 360001<br>
+                    GST: 24AAACG1234P1Z5
+                </td>
+            </tr>
+        </table>
+
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Description</th>
+                    <th style="text-align: center;">Price</th>
+                    <th style="text-align: center;">Qty</th>
+                    <th style="text-align: right;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_details %}
+                <tr>
+                    <td>
+                        <strong>{{ item.product.product_name }}</strong><br>
+                        <small style="color: #666;">{% for v in item.variations.all %}{{ v.variation_value }} {% endfor %}</small>
+                    </td>
+                    <td style="text-align: center;">${{ item.product_price }}</td>
+                    <td style="text-align: center;">{{ item.quantity }}</td>
+                    <td style="text-align: right; font-weight: bold;">${{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="totals-wrap">
+            <div class="total-row"><span>Sub-Total:</span><span>${{ subtotal }}</span></div>
+            <div class="total-row"><span>Tax (GST):</span><span>${{ order.tax }}</span></div>
+            <div class="total-row" style="color: #28a745;"><span>Shipping:</span><span>FREE</span></div>
+            <div class="grand-total">
+                <span>TOTAL:</span>
+                <span>${{ order.order_total }}</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div style="width: 60%;">
+                <strong>Terms & Conditions</strong><br>
+                This is a computer-generated invoice for your completed transaction. No signature required. 
+            </div>
+            <div style="text-align: right; width: 40%;">
+                <strong>Authorized Signatory</strong><br>
+                <div style="margin-top: 30px; border-top: 1px solid #000; padding-top: 5px;">GreatKart Official</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

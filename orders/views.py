@@ -1,17 +1,15 @@
+import json
+import datetime
 from django.shortcuts import render, redirect
 from carts.models import CartItem
 from .forms import OrderForm, Order
-import datetime
-import requests
-from django.http import HttpResponse
+from weasyprint import HTML
 
-import json
 from django.http import JsonResponse
 from .models import Payment, OrderProduct
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
 
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -95,7 +93,7 @@ def payments(request):
     )
     payment.save()
 
-    # 2.Update the Order table
+    # 2. Update the Order table
     order.payment = payment
     order.is_ordered = True
     order.save()
@@ -115,13 +113,11 @@ def payments(request):
         orderproduct.save()
 
         # save the product variation
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all()
-        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+        product_variation = item.variations.all()
         orderproduct.variations.set(product_variation)
         orderproduct.save()
 
-        # 4.Reduce Stock
+        # 4. Reduce Stock
         product = Product.objects.get(id=item.product_id)
         product.stock -= item.quantity
         product.save()
@@ -129,17 +125,40 @@ def payments(request):
     # 5. After the payment delete the cartitem
     CartItem.objects.filter(user=request.user).delete()
 
-    # Send order number and transaction id back to sendData method   
+    # --- 📄 PDF and Email Logic  ---
+    
+    order_details = OrderProduct.objects.filter(order_id=order.id)
+    subtotal = sum(item.product_price * item.quantity for item in order_details)
+    
     mail_subject = 'Thank you for your order!'
-    message = render_to_string('orders/order_recieved_email.html',{
+    
+    # Data for Email Body
+    context = {
         'user': request.user,
-        'order':order,
-    })
+        'order': order,
+        'order_details': order_details,
+        'subtotal': subtotal,
+    }
     
+    message = render_to_string('orders/order_recieved_email.html', context)
     to_email = request.user.email
-    send_email = EmailMessage(mail_subject, message, to=[to_email])
-    send_email.send()
     
+    # create EmailMessage object
+    send_email = EmailMessage(mail_subject, message, to=[to_email])
+    
+    # WeasyPrint through PDF Generate
+    html_string = render_to_string('accounts/invoice_pdf.html', context)
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+    
+    # Atteched the PDF 
+    send_email.attach(f'Invoice_{order.order_number}.pdf', pdf, 'application/pdf')
+    
+    # Sent Email
+    try:
+        send_email.send()
+    except Exception as e:
+        print(f"Email error: {e}")
+
     # 6. Success response
     data = {
         'order_number': order.order_number,

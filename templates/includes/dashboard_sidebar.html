@@ -1,0 +1,21 @@
+<aside class="col-md-3">
+    <!--   SIDEBAR   -->
+    <ul class="list-group">
+        <a class="list-group-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}"> 
+            <i class="fa fa-home mr-2"></i> Dashboard 
+        </a>
+        <a class="list-group-item {% if request.resolver_match.url_name == 'my_orders' or 'order_detail' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'my_orders' %}"> 
+            <i class="fa fa-shopping-cart mr-2"></i> My Orders 
+        </a>
+        <a class="list-group-item {% if request.resolver_match.url_name == 'edit_profile' %}active{% endif %}" href="{% url 'edit_profile' %}"> 
+            <i class="fa fa-user mr-2"></i> Edit Profile 
+        </a>
+        
+        <a class="list-group-item {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}" href="{% url 'change_password' %}"> 
+            <i class="fa fa-key mr-2"></i> Change Password 
+        </a>
+    </ul>
+    <br>
+    <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+    <!--   SIDEBAR .//END   -->
+</aside>

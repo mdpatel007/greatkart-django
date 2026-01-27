@@ -1,14 +1,20 @@
-from django.shortcuts import render, redirect
+import requests
+from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import Banner
 from store.models import Product
-from .forms import RegistrationForm
-from .models import Account
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
-import requests
+from orders.models import Order, OrderProduct
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.conf import settings
+from django.http import HttpResponse
+from weasyprint import HTML
 
 # Varification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -163,7 +169,12 @@ def activate(request, uidb64, token):
     
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request,'accounts/dashboard.html')
+    orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
+    orders_count = orders.count()
+    context = {
+        'orders_count': orders_count,
+    }
+    return render(request,'accounts/dashboard.html',context)
 
 def forgotPassword(request):
     if request.method == 'POST':
@@ -226,3 +237,87 @@ def resetpassword(request):
             return redirect('resetpassword')
     else:
         return render(request,'accounts/resetpassword.html')
+    
+def my_orders(request):
+    userprofile = UserProfile.objects.get(user=request.user)
+    oders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at')
+    context = {
+        'orders' : oders,
+        'userprofile':userprofile,  
+    }
+    return render(request,'accounts/my_orders.html',context)
+
+@login_required(login_url='login')
+def edit_profile(request):
+    userprofile = UserProfile.objects.get(user=request.user)
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile has been updated.')
+            return redirect('edit_profile')
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+    
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'userprofile': userprofile,
+    }
+    return render(request, 'accounts/edit_profile.html', context)
+
+@login_required(login_url='login')
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/change_password.html', {'form': form})
+    
+@login_required(login_url='login')
+def order_detail(request, order_id):
+    try:
+        order = Order.objects.get(order_number=order_id, is_ordered=True)
+        order_details = OrderProduct.objects.filter(order_id=order.id)
+        subtotal = 0
+        for i in order_details:
+            subtotal += i.product_price * i.quantity
+
+        context = {
+            'order': order,
+            'order_details': order_details,
+            'subtotal': subtotal,
+        }
+        return render(request, 'accounts/order_detail.html', context)
+    except (Order.DoesNotExist):
+        return redirect('dashboard')
+    
+def generate_pdf_invoice(request, order_id):
+    order = Order.objects.get(order_number=order_id, is_ordered=True)
+    order_details = OrderProduct.objects.filter(order_id=order.id)
+    subtotal = sum(item.product_price * item.quantity for item in order_details)
+    
+    context = {
+        'order': order,
+        'order_details': order_details,
+        'subtotal': subtotal,
+    }
+    
+    html_string = render_to_string('accounts/invoice_pdf.html', context)
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="Invoice_{order.order_number}.pdf"'
+
+    HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(response)
+    
+    return response
