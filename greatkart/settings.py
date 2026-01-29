@@ -31,7 +31,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool) # true
  
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -160,3 +160,4 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool) # true
 SESSION_EXPIRE_SECONDS = 3600
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = 'login/'
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
