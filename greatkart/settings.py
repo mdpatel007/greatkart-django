@@ -106,9 +106,8 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
-)
+STATICFILES_STORAGE = "whitenoise.storage.ManifestStaticFilesStorage"
+WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 
 
 # ✅ MEDIA FILES
