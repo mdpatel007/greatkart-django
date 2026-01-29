@@ -64,9 +64,13 @@ MIDDLEWARE = [
 ]
 
 
+DEBUG = False
+
 ALLOWED_HOSTS = [
-    "greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
+    ".elasticbeanstalk.com",
+    "13.205.100.166"
 ]
+
     
 CSRF_TRUSTED_ORIGINS = [
     "https://greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
