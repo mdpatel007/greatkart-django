@@ -31,7 +31,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool) # true
  
-ALLOWED_HOSTS = ['django-greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com']
+# ALLOWED_HOSTS = ['django-greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_browser_reload',
     'category',
     'accounts',
     'store',
@@ -63,10 +63,6 @@ MIDDLEWARE = [
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
 ]
 
-if DEBUG:
-    MIDDLEWARE += [
-        "django_browser_reload.middleware.BrowserReloadMiddleware",
-    ]
 
 if DEBUG:
     ALLOWED_HOSTS = [
