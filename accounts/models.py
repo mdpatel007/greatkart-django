@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
     address_line_1 = models.CharField(blank=True, max_length=100)
     address_line_2 = models.CharField(blank=True, max_length=100)
-    profile_picture = models.ImageField(blank=True, upload_to='userprofile')
+    profile_picture = models.ImageField(upload_to='userprofile', blank=True, null=True)
     city = models.CharField(blank=True, max_length=20)
     state = models.CharField(blank=True, max_length=20)
     country = models.CharField(blank=True, max_length=20)
@@ -90,7 +90,7 @@ class UserProfile(models.Model):
 class Banner(models.Model):
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to='photos/banners/')
-    link = models.CharField(blank=True) # Banner par click kare to kya jay?
+    link = models.CharField(max_length=255) # Banner par click kare to kya jay?
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

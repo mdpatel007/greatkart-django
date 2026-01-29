@@ -61,10 +61,22 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
-
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
+if DEBUG:
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
+
+if DEBUG:
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+        '.elasticbeanstalk.com',
+    ]
+else:
+    ALLOWED_HOSTS = ['.elasticbeanstalk.com']
+    
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 ROOT_URLCONF = 'greatkart.urls'
 
