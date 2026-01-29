@@ -13,10 +13,11 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 
 # Allowed Hosts (Elastic Beanstalk + IP)
-ALLOWED_HOSTS = [
-    ".elasticbeanstalk.com",
-    "13.205.100.166",
-]
+# ALLOWED_HOSTS = [
+#     ".elasticbeanstalk.com",
+#     "13.205.100.166",
+# ]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
