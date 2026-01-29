@@ -32,8 +32,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool) # true
  
 # ALLOWED_HOSTS = ['django-greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com']
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = [
+    "greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
+]
 
 # Application definition
 
@@ -67,7 +68,10 @@ ALLOWED_HOSTS = [
     "greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
 ]
     
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = [
+    "https://greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
+]
+
 ROOT_URLCONF = 'greatkart.urls'
 
 TEMPLATES = [
@@ -163,3 +167,9 @@ SESSION_EXPIRE_SECONDS = 3600
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 SESSION_TIMEOUT_REDIRECT = 'login/'
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
