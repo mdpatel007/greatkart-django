@@ -1,15 +1,14 @@
 import os
 from pathlib import Path
-from decouple import config
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY
-SECRET_KEY = config("SECRET_KEY", default="django-insecure-n0+-v)+&97tv)v2c6oefe!4k&q9gqvzpt(a#a(&c=71u)l)l37")
+SECRET_KEY = os.environ.get("SECRET_KEY","django-insecure-n0+-v)+&97tv)v2c6oefe!4k&q9gqvzpt(a#a(&c=71u)l)l37")
 
-DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 
 # Allowed Hosts (Elastic Beanstalk + IP)
@@ -129,9 +128,10 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Email Configuration
-EMAIL_HOST = config("EMAIL_HOST", default="")
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
-EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
-EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+
 
