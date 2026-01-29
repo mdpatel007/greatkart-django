@@ -3,7 +3,13 @@ import datetime
 from django.shortcuts import render, redirect
 from carts.models import CartItem
 from .forms import OrderForm, Order
-from weasyprint import HTML
+from django.http import HttpResponse
+
+try:
+    from weasyprint import HTML
+except Exception:
+    HTML = None
+
 
 from django.http import JsonResponse
 from .models import Payment, OrderProduct
@@ -148,6 +154,9 @@ def payments(request):
     
     # WeasyPrint through PDF Generate
     html_string = render_to_string('accounts/invoice_pdf.html', context)
+    if HTML is None:
+        return HttpResponse("PDF feature disabled on server", status=501)
+    
     pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
     
     # Atteched the PDF 

@@ -14,7 +14,12 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.conf import settings
 from django.http import HttpResponse
-from weasyprint import HTML
+
+try:
+    from weasyprint import HTML
+except Exception:
+    HTML = None
+
 
 # Varification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -317,6 +322,9 @@ def generate_pdf_invoice(request, order_id):
     
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="Invoice_{order.order_number}.pdf"'
+
+    if HTML is None:
+        return HttpResponse("PDF feature disabled on server", status=501)
 
     HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(response)
     
