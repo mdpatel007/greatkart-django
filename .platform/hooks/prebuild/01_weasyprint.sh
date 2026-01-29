@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Installing WeasyPrint system dependencies..."
+echo "Installing WeasyPrint dependencies..."
 
 sudo dnf install -y \
   cairo \
@@ -8,6 +8,10 @@ sudo dnf install -y \
   libffi \
   freetype \
   harfbuzz \
+  fribidi \
   fontconfig \
   libjpeg-turbo \
-  zlib
+  zlib \
+  redhat-rpm-config \
+  gcc \
+  python3-devel
