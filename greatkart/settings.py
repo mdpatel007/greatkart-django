@@ -64,14 +64,9 @@ MIDDLEWARE = [
 ]
 
 
-if DEBUG:
-    ALLOWED_HOSTS = [
-        '127.0.0.1',
-        'localhost',
-        '.elasticbeanstalk.com',
-    ]
-else:
-    ALLOWED_HOSTS = ['.elasticbeanstalk.com']
+ALLOWED_HOSTS = [
+    "greatkart-env.eba-wgp88bpi.us-west-2.elasticbeanstalk.com"
+]
     
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'http://localhost:8000']
 ROOT_URLCONF = 'greatkart.urls'
