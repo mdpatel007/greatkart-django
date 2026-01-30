@@ -1,7 +1,9 @@
 #!/bin/bash
-echo "Installing WeasyPrint dependencies..."
+set -e
 
-sudo dnf install -y \
+echo "Installing missing WeasyPrint system libraries..."
+
+dnf install -y \
   cairo \
   pango \
   gdk-pixbuf2 \
@@ -12,6 +14,8 @@ sudo dnf install -y \
   fontconfig \
   libjpeg-turbo \
   zlib \
-  redhat-rpm-config \
-  gcc \
-  python3-devel
+  pangocairo \
+  libxml2 \
+  libxslt
+
+echo "WeasyPrint full dependencies installed successfully."
