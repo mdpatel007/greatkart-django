@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-echo "Installing WeasyPrint dependencies (Amazon Linux 2023)..."
+echo "Installing WeasyPrint system dependencies..."
 
-dnf install -y \
+sudo dnf install -y \
   cairo \
   pango \
   gdk-pixbuf2 \
@@ -17,8 +17,4 @@ dnf install -y \
   libxml2 \
   libxslt
 
-echo "Installing WeasyPrint Python package..."
-source /var/app/venv/*/bin/activate
-pip install --upgrade weasyprint
-
-echo "WeasyPrint install complete ✅"
+echo "System dependencies installed ✅"
