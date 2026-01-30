@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
 
-echo "Installing missing WeasyPrint system libraries..."
+echo "Installing full WeasyPrint dependencies..."
 
 dnf install -y \
   cairo \
   pango \
+  pangocairo \
   gdk-pixbuf2 \
   libffi \
   freetype \
@@ -14,8 +15,7 @@ dnf install -y \
   fontconfig \
   libjpeg-turbo \
   zlib \
-  pangocairo \
   libxml2 \
   libxslt
 
-echo "WeasyPrint full dependencies installed successfully."
+echo "WeasyPrint dependencies installed successfully ✅"
