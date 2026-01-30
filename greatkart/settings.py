@@ -91,16 +91,12 @@ if "RDS_HOSTNAME" in os.environ:
         }
     }
 else:
-    raise Exception("RDS not configured!")
-
-    
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.sqlite3",
-    #         "NAME": "/db.sqlite3",
-    #     }
-    # }
-
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "/db.sqlite3",
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
