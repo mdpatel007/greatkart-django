@@ -1,6 +1,16 @@
 # 🛒 GreatKart - Professional Django E-Commerce Platform
 
+Live Demo: https://bit.ly/greatkart-mihir
+
 GreatKart is a high-performance, full-featured E-commerce solution built using the **Django Web Framework**. This project demonstrates an end-to-end implementation of a modern online store, focusing on scalability, security, and user experience.
+
+## 🌍 Live Production Deployment
+Unlike basic development projects, GreatKart is fully architected for the cloud:
+
+* **Hosting:** Deployed on **AWS Elastic Beanstalk** (Python Platform) for automated scaling and management. 🚀
+* **Database:** Powered by **Amazon RDS (PostgreSQL)** for reliable, production-grade data storage. 🗄️
+* **Media Storage:** Integrated with **Amazon S3** to ensure product images persist across deployments. ☁️
+* **Environment Management:** Securely handled via AWS Environment Properties and IAM roles.
 
 ## 🚀 Key Features Implemented
 
@@ -25,9 +35,10 @@ GreatKart is a high-performance, full-featured E-commerce solution built using t
 * **Responsive Design**: Fully mobile-responsive UI built with Bootstrap.
 
 ## 🛠️ Technology Stack
-* **Backend**: Python 3.x, Django 5.x 🐍
+* **Backend**: Python 3.13, Django 5.x 🐍
 * **Frontend**: HTML5, CSS3, Bootstrap 4/5 🎨
-* **Database**: SQLite3 (Development) 🗄️
+* **Database**: PostgreSQL (Production), SQLite3 (Development) 🗄️
+* **Cloud Services**: AWS (Elastic Beanstalk, RDS, S3, IAM) ☁️
 * **Version Control**: Git & GitHub 🐙
 
 ## 🔧 Installation & Setup
@@ -54,4 +65,5 @@ GreatKart is a high-performance, full-featured E-commerce solution built using t
    ```bash
    python manage.py runserver
 
+## 👤 Author
 Developed with ❤️ by mdpatel007
